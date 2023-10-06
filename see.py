@@ -16,7 +16,18 @@ metadata_files = sorted([f for f in os.listdir(metadata_dir) if f.endswith('.jso
 fig, ax = plt.subplots()
 
 # Loop over frames
+i=0
 for frame_file, metadata_file in zip(frame_files, metadata_files):
+    if i %2==0:
+        i+=1
+        continue
+    if i %5==0:
+        i+=1
+        continue
+    if i %3==0:
+        i+=1
+        continue
+    i+=1
     print(frame_file)
     # Ensure that the frame and metadata files match
     if frame_file.split('.')[0].split('_')[-1] != metadata_file.split('.')[0].split('_')[-1]:
@@ -32,7 +43,9 @@ for frame_file, metadata_file in zip(frame_files, metadata_files):
         metadata = json.load(file)
 
     # Draw bounding boxes and labels
+    # print(metadata['num_shapes_on_screen'])
     for obj in metadata['objects']:
+        num=metadata['num_shapes_on_screen']
         bbox = obj['bbox']
         label = obj['label']
         color = obj['color']
@@ -44,6 +57,7 @@ for frame_file, metadata_file in zip(frame_files, metadata_files):
 
         # Add label and color information
         plt.text(bbox[0], bbox[1] - 10, f"{label} {color} {'Error' if is_error else ''}", color='white')
+        plt.text(0,0,num, color='blue')
 
     # Pause for a while
     plt.pause(0.00000000000000000000000000000000001)

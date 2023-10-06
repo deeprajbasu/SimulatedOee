@@ -46,6 +46,8 @@ shape_interval = 10
 show_bounding_box = False
 show_text = False
 
+classes ={ 'rect':1, 'circle':2, 'error_rect':3, 'error_circle':4}
+
 # Main game loop
 while True:
     for event in pygame.event.get():
@@ -96,22 +98,25 @@ while True:
 
 
         window.blit(shape_surface, (x, y))
-
-    pygame.image.save(window, f'images/frame_{frame_count:04d}.png')
-
-    frame_metadata = {
-        'objects': [
-            {
-                'bbox': [x, y, size, size],
-                'label': f"{shape_type}",
-                'color': color,
-                'is_error': 'error' in shape_type
-            }
-            for x, y, shape_type, color, size in shapes
-        ]
-    }
-    with open(f'metadata/frame_{frame_count:04d}.json', 'w') as metadata_file:
-        json.dump(frame_metadata, metadata_file)
+    if frame_count>120:
+        pygame.image.save(window, f'images/frame_{frame_count:04d}.png')
+        
+        frame_metadata = {
+            'objects': [
+                {
+                    'bbox': [x, y, size, size],
+                    'label': f"{shape_type}",
+                    'color': color,
+                    'is_error': 'error' in shape_type
+                    
+                }
+                for x, y, shape_type, color, size in shapes
+            ]
+        }
+        num_shapes_on_screen = len(shapes)
+        frame_metadata['num_shapes_on_screen'] = num_shapes_on_screen
+        with open(f'metadata/frame_{frame_count:04d}.json', 'w') as metadata_file:
+            json.dump(frame_metadata, metadata_file)
 
     frame_count += 1
     pygame.display.update()

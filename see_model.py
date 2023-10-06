@@ -51,6 +51,7 @@ for frame_file, prediction_file in zip(frame_files, prediction_files):
 
         # Add label
         plt.text(box[0], box[1] - 10, f"{label}", color='white')
+        plt.text(0,0, len(prediction['boxes']), color='blue')
 
     # Pause for a while
     plt.pause(0.1)
